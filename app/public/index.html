@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Linky Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+</head>
+<body>
+
+  <header>
+    <h1>Linky <span>Dashboard</span></h1>
+    <div class="status">
+      <div class="dot"></div>
+      <span id="status-text">Connexion...</span>
+    </div>
+  </header>
+
+  <div class="cards">
+    <div class="card green">
+      <div class="label">Puissance instantanée</div>
+      <div class="value" id="val-puissance">—</div>
+      <div class="unit">VA</div>
+    </div>
+    <div class="card blue">
+      <div class="label">Énergie totale soutirée</div>
+      <div class="value" id="val-energie">—</div>
+      <div class="unit">kWh</div>
+    </div>
+    <div class="card orange">
+      <div class="label">Adresse compteur</div>
+      <div class="value" id="val-adresse" style="font-size:1.1rem;margin-top:0.6rem">—</div>
+      <div class="unit">&nbsp;</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="active" onclick="setRange(this, 6)">6h</button>
+    <button onclick="setRange(this, 24)">24h</button>
+    <button onclick="setRange(this, 48)">48h</button>
+  </div>
+
+  <div class="charts">
+    <div class="chart-box">
+      <h2>Puissance instantanée (VA)</h2>
+      <div id="chart-puissance" class="echarts"></div>
+    </div>
+    <div class="chart-box">
+      <h2>Énergie consommée par 10 min (Wh)</h2>
+      <div id="chart-energie" class="echarts"></div>
+    </div>
+  </div>
+
+  <div id="last-update"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

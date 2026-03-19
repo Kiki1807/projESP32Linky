@@ -7,9 +7,55 @@ services:
       - "1883:1883"
       - "9001:9001"
     volumes:
-      # On lie le dossier local "mosquitto/config" au dossier config du conteneur
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
       - ./mosquitto/log:/mosquitto/log
     environment:
       - TZ=Europe/Paris
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d  #scripts SQL au démarrage
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=teleinfo
+      - MYSQL_USER=linky
+      - MYSQL_PASSWORD=linkypassword
+      - TZ=Europe/Paris
+
+  app:
+    build: ./app
+    container_name: app
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mosquitto
+      - mysql
+    environment:
+      - MQTT_HOST=mosquitto
+      - MQTT_PORT=1883
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=teleinfo
+      - DB_USER=linky
+      - DB_PASSWORD=linkypassword
+      - TZ=Europe/Paris
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=root
