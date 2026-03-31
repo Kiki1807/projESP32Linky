@@ -58,4 +58,15 @@ services:
     environment:
       - PMA_HOST=mysql
       - PMA_USER=root
-      - PMA_PASSWORD=root
+      - PMA_PASSWORD=rootpassword
+
+  apache:
+    image: httpd:alpine
+    container_name: apache
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./app/public:/usr/local/apache2/htdocs
+    depends_on:
+      - app

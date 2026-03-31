@@ -63,7 +63,7 @@ chartE.setOption({
 //Mise à jour des cartes (dernière valeur)
 async function loadLatest() {
   try {
-    const res = await fetch('/api/latest');
+    const res = await fetch('http://localhost:3000/api/latest');
     const d = await res.json();
     if (!d.timestamp) {
       document.getElementById('status-text').textContent = 'En attente de données...';
@@ -81,7 +81,7 @@ async function loadLatest() {
 
 //Mise à jour de la courbe de puissance
 async function loadPuissance() {
-  const res = await fetch(`/api/puissance?heures=${heures}`);
+  const res = await fetch(`http://localhost:3000/api/puissance?heures=${heures}`);
   const data = await res.json();
   chartP.setOption({
     series: [{ data: data.map(r => [r.timestamp, r.puissance]) }]
@@ -90,7 +90,7 @@ async function loadPuissance() {
 
 //Mise à jour de l'histogramme d'énergie
 async function loadEnergie() {
-  const res = await fetch(`/api/energie?heures=${heures}`);
+  const res = await fetch(`http://localhost:3000/api/energie?heures=${heures}`);
   const data = await res.json();
   chartE.setOption({
     series: [{ data: data.map(r => [r.periode, r.consommation]) }]

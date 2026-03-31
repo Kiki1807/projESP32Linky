@@ -1,11 +1,11 @@
 const express = require("express");
 const mqtt = require("mqtt");
 const mysql = require("mysql2/promise");
-const path = require("path");
+const cors = require("cors");
 
 const app = express();
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(cors());
 
 //Config
 const MQTT_HOST = process.env.MQTT_HOST || "localhost";
@@ -16,8 +16,8 @@ const DB_CONFIG = {
   host: process.env.DB_HOST || "localhost",
   port: process.env.DB_PORT || 3306,
   database: process.env.DB_NAME || "teleinfo",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "root",
+  user: process.env.DB_USER || "linky",
+  password: process.env.DB_PASSWORD || "linkypassword",
 };
 
 //MySQL
@@ -32,8 +32,8 @@ async function initDB() {
           id           INT AUTO_INCREMENT PRIMARY KEY,
           timestamp    DATETIME NOT NULL,
           adresse      VARCHAR(20),
-          puissance    INT,        -- SINSTS en VA
-          energie      BIGINT,     -- EASF01 en Wh
+          puissance    INT,
+          energie      BIGINT,
           created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           INDEX idx_timestamp (timestamp)
         )
@@ -89,7 +89,6 @@ function initMQTT() {
       console.error("Erreur traitement message:", err.message);
     }
   });
-
   client.on("error", (err) => console.error("Erreur MQTT:", err.message));
   client.on("offline", () => console.warn("MQTT hors ligne"));
 }
